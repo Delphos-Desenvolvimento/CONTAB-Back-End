@@ -1,0 +1,52 @@
+// schema.prisma
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://root:Asgardian9@localhost:3306/ArcadiaBackend"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Img {
+  id        Int       @id @default(autoincrement())
+  url       String
+  altText   String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+}
+
+model News {
+  id          Int       @id @default(autoincrement())
+  title       String
+  content     String
+  published   Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+}
+
+model NewsImg {
+  id      Int   @id @default(autoincrement())
+  newsId  Int
+  imgId   Int
+
+}
+
+model Info {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+}
+
+model InfoImg {
+  id     Int  @id @default(autoincrement())
+  infoId Int
+  imgId  Int
+
+}
