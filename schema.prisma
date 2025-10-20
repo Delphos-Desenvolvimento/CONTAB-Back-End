@@ -2,7 +2,7 @@
 
 datasource db {
   provider = "mysql"
-  url      = "mysql://root:Asgardian9@localhost:3306/ArcadiaBackend"
+  url      = "mysql://root:senha123@192.168.0.117:3306/teste"
 }
 
 generator client {
@@ -49,4 +49,10 @@ model InfoImg {
   infoId Int
   imgId  Int
 
+}
+
+model Admin {
+  id       Int    @id @default(autoincrement())
+  user     String @unique
+  password String
 }
