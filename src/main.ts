@@ -1,5 +1,4 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
 import * as express from 'express';
 import { AppModule } from './app.module';
 
@@ -17,9 +16,6 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization', 'X-User-Agent', 'X-Forwarded-For'],
     exposedHeaders: ['X-User-Agent', 'X-Forwarded-For']
   });
-
-  // Add global validation pipe (optional but recommended)
-  app.useGlobalPipes(new ValidationPipe());
 
   await app.listen(process.env.PORT ?? 3000);
 }
