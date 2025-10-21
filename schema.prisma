@@ -11,7 +11,8 @@ generator client {
 
 model Img {
   id        Int       @id @default(autoincrement())
-  url       String
+  url       String?
+  base64    String    @db.LongText
   altText   String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
