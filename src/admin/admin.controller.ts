@@ -7,6 +7,7 @@ export class AdminController {
 
   @Post()
   create(@Body() body: { user: string; password: string }) {
+    console.log('Received body:', body);  
     return this.adminService.create(body);
   }
 

@@ -17,6 +17,6 @@ async function bootstrap() {
     exposedHeaders: ['X-User-Agent', 'X-Forwarded-For']
   });
 
-  await app.listen(process.env.PORT ?? 3000);
+   await app.listen(process.env.PORT ?? 3000, '192.168.0.117');
 }
 bootstrap();
