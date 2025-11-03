@@ -11,7 +11,7 @@ async function bootstrap() {
   const logger = new Logger('Bootstrap');
 
   // Get environment variables with defaults
-  const port = parseInt(process.env.PORT || '3306', 10);
+  const port = parseInt(process.env.PORT || '3000', 10);
   const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
   const nodeEnv = process.env.NODE_ENV || 'development';
 
@@ -47,7 +47,7 @@ async function bootstrap() {
   app.enableCors(corsOptions);
 
   // Start the application
-  await app.listen(port, '192.168.0.117'); // Listen on all network interfaces
+  await app.listen(port, '0.0.0.0'); // Listen on all network interfaces
   
   logger.log(`Application is running in ${nodeEnv} mode`);
   logger.log(`Listening on port ${port}`);

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, UnauthorizedException } from '@nestjs/common';
 import { AdminService } from './admin.service';
 
 @Controller('admin')
@@ -6,18 +6,33 @@ export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
   @Post()
-  create(@Body() body: { user: string; password: string }) {
-    console.log('Received body:', body);  
-    return this.adminService.create(body);
+  async create(@Body() body: { user: string; password: string }) {
+    console.log('Received user creation request:', { user: body.user });
+    try {
+      const user = await this.adminService.create(body);
+      return { message: 'User created successfully', user };
+    } catch (error) {
+      throw new UnauthorizedException(error.message);
+    }
   }
 
   @Get()
-  findAll() {
-    return this.adminService.findAll();
+  async findAll() {
+    try {
+      const users = await this.adminService.findAll();
+      return { users };
+    } catch (error) {
+      throw new UnauthorizedException('Not authorized to view users');
+    }
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.adminService.findOne(id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    try {
+      const user = await this.adminService.findOne(id);
+      return { user };
+    } catch (error) {
+      throw new UnauthorizedException('Not authorized to view user');
+    }
   }
 }
