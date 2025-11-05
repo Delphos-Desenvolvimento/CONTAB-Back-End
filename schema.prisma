@@ -55,16 +55,6 @@ model Info {
 
 }
 
-model Admin {
-  id        Int      @id @default(autoincrement())
-  user      String   @unique
-  password  String
-  role      String   @default("admin")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("admins")
-}
 
 model InfoImg {
   id     Int  @id @default(autoincrement())
