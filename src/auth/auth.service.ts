@@ -1,4 +1,5 @@
 import { Injectable, UnauthorizedException, ConflictException, Logger } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 
@@ -21,7 +22,37 @@ export class AuthService {
     return (this.prismaService as any).admin;
   }
 
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private jwtService: JwtService
+  ) {}
+
+  async login(email: string, password: string) {
+    try {
+      const user = await this.validateUser(email, password);
+      if (!user) {
+        throw new UnauthorizedException('Invalid email or password');
+      }
+      const payload = { 
+        sub: user.id, 
+        email: user.user,
+        role: user.role 
+      };
+      return {
+        access_token: this.jwtService.sign(payload),
+        user: {
+          id: user.id,
+          email: user.user,
+          role: user.role,
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt
+        }
+      };
+    } catch (error) {
+      this.logger.error(`Login error: ${error.message}`, error.stack);
+      throw new UnauthorizedException('Authentication failed');
+    }
+  }
 
   async validateUser(email: string, password: string): Promise<UserWithoutPassword | null> {
     this.logger.log(`Validating user: ${email}`);

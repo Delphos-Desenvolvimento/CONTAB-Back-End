@@ -1,5 +1,6 @@
 import { Controller, Post, Body, UseGuards, Request, HttpCode, HttpStatus, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -7,28 +8,11 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  async login(@Body() credentials: { email: string; password: string }) {
-    const { email, password } = credentials;
-    
-    if (!email || !password) {
+  async login(@Body() credentials: { email?: string; password?: string }) {
+    if (!credentials?.email || !credentials?.password) {
       throw new UnauthorizedException('Email and password are required');
     }
-    
-    const user = await this.authService.validateUser(email, password);
-    if (!user) {
-      throw new UnauthorizedException('Invalid email or password');
-    }
-    
-    return { 
-      message: 'Login successful', 
-      user: {
-        id: user.id,
-        email: user.user,  // user.user contains the email
-        role: user.role,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt
-      }
-    };
+    return this.authService.login(credentials.email, credentials.password);
   }
 
   @Post('register')

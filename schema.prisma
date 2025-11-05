@@ -26,7 +26,17 @@ model News {
   published   Boolean   @default(false)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+}
 
+model Admin {
+  id        Int      @id @default(autoincrement())
+  user      String   @unique
+  password  String
+  role      String   @default("USER")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("admins")
 }
 
 model NewsImg {
